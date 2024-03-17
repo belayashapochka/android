@@ -1,6 +1,7 @@
 package com.example.personalorganizer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.personalorganizer.database.DBHelper;
-import com.example.personalorganizer.database.TaskModel;
+import com.example.personalorganizer.database.DBHelperV2;
+import com.example.personalorganizer.database.TaskDao;
+import com.example.personalorganizer.database.TaskModelV2;
 
 import java.util.List;
 
@@ -33,18 +35,22 @@ public class AddNoteActivity extends AppCompatActivity {
         noteName.setText("Первая задача");
         noteDescription.setText("Описание");
 
-        DBHelper db_HELPER_GLOBAL_SCOPE = new DBHelper( this);
 
+        DBHelperV2 db = Room.databaseBuilder(getApplicationContext(),
+                DBHelperV2.class, "tasks.db").build();
+        TaskDao taskDao = db.taskDao();
         saveNoteButton = (Button) findViewById(R.id.addNewNoteButton);
         saveNoteButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                List<TaskModel> tasks = db_HELPER_GLOBAL_SCOPE.getAllTasks();
+
+
+                List<TaskModelV2> tasks = taskDao.getAllTasks();
                 int nextNoteId = tasks.size() + 1;
 
-                TaskModel task = new TaskModel(nextNoteId,
+                TaskModelV2 task = new TaskModelV2(nextNoteId,
                         noteName.getText().toString(),
                         noteDescription.getText().toString());
-                db_HELPER_GLOBAL_SCOPE.addTask(task);
+                taskDao.addTask(task);
 
                 finish();
 

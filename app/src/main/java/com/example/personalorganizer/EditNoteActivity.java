@@ -1,6 +1,7 @@
 package com.example.personalorganizer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.personalorganizer.database.DBHelper;
-import com.example.personalorganizer.database.TaskModel;
+import com.example.personalorganizer.database.DBHelperV2;
+import com.example.personalorganizer.database.TaskDao;
+import com.example.personalorganizer.database.TaskModelV2;
+
 
 public class EditNoteActivity extends AppCompatActivity {
 
@@ -32,7 +35,9 @@ public class EditNoteActivity extends AppCompatActivity {
         noteName.setText(intent.getStringExtra(MainActivity.EXTRA_NOTE_NAME));
         noteDescription.setText(intent.getStringExtra(MainActivity.EXTRA_NOTE_DESCRIPTION));
 
-        DBHelper db_HELPER_GLOBAL_SCOPE = new DBHelper( this);
+        DBHelperV2 db = Room.databaseBuilder(getApplicationContext(),
+                DBHelperV2.class, "tasks.db").build();
+        TaskDao taskDao = db.taskDao();
 
         saveNoteButton = (Button) findViewById(R.id.saveNoteButton);
         saveNoteButton.setOnClickListener(new View.OnClickListener() {
@@ -42,12 +47,12 @@ public class EditNoteActivity extends AppCompatActivity {
 
 
 
-                TaskModel task = db_HELPER_GLOBAL_SCOPE.getTaskById(currentCursor);
+                TaskModelV2 task = taskDao.getTaskById(currentCursor);
 
                 task.setName(noteName.getText().toString());
                 task.setDescription(noteDescription.getText().toString());
 
-                db_HELPER_GLOBAL_SCOPE.updateTask(task);
+                taskDao.updateTask(task);
 
 
                 finish();

@@ -10,16 +10,16 @@ import java.util.List;
 @Dao
 public interface TaskDao {
     @Insert
-    void addTask(TaskModel task);
+    void addTask(TaskModelV2 task);
 
     @Update
-    void updateTask(TaskModel task);
+    void updateTask(TaskModelV2 task);
 
     @Query("SELECT * FROM tasks")
-    List<TaskModel> getAllTasks();
+    List<TaskModelV2> getAllTasks();
 
     @Query("SELECT * FROM tasks WHERE id = :id")
-    TaskModel getTaskById(int id);
+    TaskModelV2 getTaskById(int id);
 
 
 }

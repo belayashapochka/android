@@ -15,10 +15,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.personalorganizer.database.DBHelper;
+
 import com.example.personalorganizer.database.DBHelperV2;
 import com.example.personalorganizer.database.TaskDao;
-import com.example.personalorganizer.database.TaskModel;
+import com.example.personalorganizer.database.TaskModelV2;
 
 import java.util.List;
 
@@ -32,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private Button addNoteButton, editNoteButton, showNoteButton;
     private ImageButton prevNote, nextNote;
     private int noteIndex = 0;
-
+    DBHelperV2 db = Room.databaseBuilder(getApplicationContext(),
+            DBHelperV2.class, "tasks.db").build();
+    TaskDao taskDao = db.taskDao();
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
         noteDescription = (TextView) findViewById(R.id.noteDescription);
         addNoteButton = (Button) findViewById(R.id.addNoteButton);
 
-        DBHelper db_HELPER_GLOBAL_SCOPE = new DBHelper( this);
-        List<TaskModel> tasks = db_HELPER_GLOBAL_SCOPE.getAllTasks();
+        List<TaskModelV2> tasks = taskDao.getAllTasks();
+
         int maxNoteId = tasks.size();
         if( maxNoteId==0){
             noteName.setText("Создай первую заметку");
@@ -60,11 +62,11 @@ public class MainActivity extends AppCompatActivity {
         showNoteButton = (Button) findViewById(R.id.showNoteButton);
         showNoteButton.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
-            List<TaskModel> tasks = db_HELPER_GLOBAL_SCOPE.getAllTasks();
+            List<TaskModelV2> tasks = taskDao.getAllTasks();
             int maxNoteId = tasks.size();
             noteIndex = maxNoteId;
 
-            TaskModel task = db_HELPER_GLOBAL_SCOPE.getTaskById(noteIndex);
+            TaskModelV2 task = taskDao.getTaskById(noteIndex);
             noteName.setText(task.getName());
             noteDescription.setText(task.getDescription());
         }
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 }else {
                     noteIndex = (noteIndex <= 2) ? 1 : noteIndex - 1;
 
-                    TaskModel task = db_HELPER_GLOBAL_SCOPE.getTaskById(noteIndex);
+                    TaskModelV2 task = taskDao.getTaskById(noteIndex);
                     noteName.setText(task.getName());
                     noteDescription.setText(task.getDescription());
                 }
@@ -91,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         nextNote = (ImageButton) findViewById(R.id.nextNoteImageButton);
         nextNote.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                List<TaskModel> tasks = db_HELPER_GLOBAL_SCOPE.getAllTasks();
+                List<TaskModelV2> tasks = taskDao.getAllTasks();
                 int maxCurrentNote = tasks.size();
 
                 if( maxCurrentNote==0){
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 }else {
                     noteIndex = (noteIndex == maxCurrentNote) ? maxCurrentNote : noteIndex + 1;
 
-                    TaskModel task = db_HELPER_GLOBAL_SCOPE.getTaskById(noteIndex);
+                    TaskModelV2 task = taskDao.getTaskById(noteIndex);
                     noteName.setText(task.getName());
                     noteDescription.setText(task.getDescription());
                 }
@@ -134,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI(int currentCursor) {
 
 
-        DBHelper db_HELPER_GLOBAL_SCOPE = new DBHelper( this);
-        TaskModel task = db_HELPER_GLOBAL_SCOPE.getTaskById(currentCursor);
+        TaskDao taskDao = db.taskDao();
+        TaskModelV2 task = taskDao.getTaskById(currentCursor);
             noteName.setText(task.getName());
             noteDescription.setText(task.getDescription());
     }
@@ -145,15 +147,18 @@ public class MainActivity extends AppCompatActivity {
         int currentCursor = noteIndex;
 
         if(currentCursor == 0){
-            DBHelper db_HELPER_GLOBAL_SCOPE = new DBHelper( this);
-            List<TaskModel> tasks = db_HELPER_GLOBAL_SCOPE.getAllTasks();
+//            DBHelper db_HELPER_GLOBAL_SCOPE = new DBHelper( this);
+
+
+            TaskDao taskDao = db.taskDao();
+            List<TaskModelV2> tasks = taskDao.getAllTasks();
             if (tasks.size() == 0){
                 noteName.setText("Первая задача");
                 noteDescription.setText("Описание");
-                TaskModel task = new TaskModel(currentCursor,
+                TaskModelV2 task = new TaskModelV2(currentCursor,
                         noteName.getText().toString(),
                         noteDescription.getText().toString());
-                db_HELPER_GLOBAL_SCOPE.addTask(task);
+                taskDao.addTask(task);
             }
         }
         Intent intent = new Intent(this, EditNoteActivity.class);
@@ -193,16 +198,5 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-//    static public  ArrayList<String> getNotesTitles()
-//    {
-//
-//        List<TaskModel> tasks = db_HELPER_GLOBAL_SCOPE.getAllTasks();
-//
-//        ArrayList<String> taskNames = tasks.stream()
-//                .map(TaskModel::getName) // Extracting the name attribute
-//                .collect(Collectors.toCollection(ArrayList::new));
-//        return taskNames;
-//
-//    }
 
 }
