@@ -36,11 +36,11 @@
         android:layout_width="168dp"
         android:layout_height="53dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="156dp"
+        android:onClick="saveNote"
         android:text="@string/button_add_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:onClick="saveNote"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/showNoteButton"

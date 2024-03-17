@@ -2,23 +2,24 @@ package com.example.personalorganizer;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.EditText;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.example.personalorganizer.database.DBHelper;
+import com.example.personalorganizer.database.DBHelperV2;
+import com.example.personalorganizer.database.TaskDao;
+import com.example.personalorganizer.database.TaskModel;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -58,15 +59,15 @@ public class MainActivity extends AppCompatActivity {
         editNoteButton = (Button) findViewById(R.id.editNoteButton);
         showNoteButton = (Button) findViewById(R.id.showNoteButton);
         showNoteButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                List<TaskModel> tasks = db_HELPER_GLOBAL_SCOPE.getAllTasks();
-                int maxNoteId = tasks.size();
-                noteIndex = maxNoteId;
+        public void onClick(View v) {
+            List<TaskModel> tasks = db_HELPER_GLOBAL_SCOPE.getAllTasks();
+            int maxNoteId = tasks.size();
+            noteIndex = maxNoteId;
 
-                TaskModel task = db_HELPER_GLOBAL_SCOPE.getTaskById(noteIndex);
-                noteName.setText(task.getName());
-                noteDescription.setText(task.getDescription());
-            }
+            TaskModel task = db_HELPER_GLOBAL_SCOPE.getTaskById(noteIndex);
+            noteName.setText(task.getName());
+            noteDescription.setText(task.getDescription());
+        }
         });
         prevNote = (ImageButton) findViewById(R.id.prevNoteImageButton);
         prevNote.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(int currentCursor) {
+
+
         DBHelper db_HELPER_GLOBAL_SCOPE = new DBHelper( this);
         TaskModel task = db_HELPER_GLOBAL_SCOPE.getTaskById(currentCursor);
             noteName.setText(task.getName());
@@ -190,4 +193,16 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+//    static public  ArrayList<String> getNotesTitles()
+//    {
+//
+//        List<TaskModel> tasks = db_HELPER_GLOBAL_SCOPE.getAllTasks();
+//
+//        ArrayList<String> taskNames = tasks.stream()
+//                .map(TaskModel::getName) // Extracting the name attribute
+//                .collect(Collectors.toCollection(ArrayList::new));
+//        return taskNames;
+//
+//    }
+
 }

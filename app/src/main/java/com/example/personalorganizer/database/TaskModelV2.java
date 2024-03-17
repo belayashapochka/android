@@ -1,14 +1,18 @@
-package com.example.personalorganizer;
+package com.example.personalorganizer.database;
 
-import java.util.List;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-public class TaskModel { // model
+@Entity(tableName = "tasks")
+public class TaskModelV2 {
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
     private String description;
-    public TaskModel() {
+
+    public TaskModelV2() {
     }
-    public TaskModel(int id, String name, String description) {
+    public TaskModelV2(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -37,6 +41,4 @@ public class TaskModel { // model
     public String getDescription() {
         return description;
     }
-
-
 }

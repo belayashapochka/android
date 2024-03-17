@@ -1,4 +1,4 @@
-package com.example.personalorganizer;
+package com.example.personalorganizer.database;
 
 import android.content.ContentValues;
 import android.content.Context;
