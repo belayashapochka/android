@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditNoteActivity">
+
+
+    <EditText
+        android:id="@+id/noteName"
+        android:layout_width="377dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="28dp"
+        android:text="@string/note_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/noteDescription"
+        android:layout_width="374dp"
+        android:layout_height="82dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="125dp"
+        android:text="@string/note_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/saveNoteButton"
+        android:layout_width="370dp"
+        android:layout_height="84dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="237dp"
+        android:text="@string/button_save_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
